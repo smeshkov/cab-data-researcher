@@ -2,7 +2,7 @@ package cache
 
 import (
 	"context"
-	
+
 	"github.com/smeshkov/cab-data-researcher/db"
 )
 

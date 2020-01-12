@@ -17,11 +17,12 @@ func CreateHandler(env, version string, config *cfg.Config, cdb cache.CabDBCache
 	r := mux.NewRouter()
 
 	// Indicate the server is healthy.
-	r.Methods("GET").Path("/health").HandlerFunc(
-		func(w http.ResponseWriter, r *http.Request) {
-			// w.Write([]byte("{ \"status\": \"ok\"} "))
-			handlers.Write(r.Context(), w, map[string]string{"version": version, "status": "ok"})
-		})
+	r.Methods("GET").
+		Path("/health").
+		Handler(handlers.AppHandler(
+			func(w http.ResponseWriter, r *http.Request) *handlers.AppError {
+				return handlers.Write(r.Context(), w, map[string]string{"version": version, "status": "ok"})
+			}))
 
 	// ------------------------ API ------------------------
 	api := r.PathPrefix("/api/v1").Subrouter()

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 	"time"
-	
+
 	"github.com/smeshkov/cab-data-researcher/cfg"
 	"github.com/smeshkov/cab-data-researcher/ctx"
 	"github.com/smeshkov/cab-data-researcher/db"
