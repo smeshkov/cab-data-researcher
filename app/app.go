@@ -6,12 +6,12 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/smeshkov/cab-data-researcher/app/handlers"
-	"github.com/smeshkov/cab-data-researcher/cfg"
 	"github.com/smeshkov/cab-data-researcher/cache"
+	"github.com/smeshkov/cab-data-researcher/cfg"
 )
 
 // CreateHandler creates handler for application.
-func CreateHandler(env string, config *cfg.Config, cdb cache.CabDBCache) http.Handler {
+func CreateHandler(env, version string, config *cfg.Config, cdb cache.CabDBCache) http.Handler {
 	// Use gorilla/mux for rich routing.
 	// See http://www.gorillatoolkit.org/pkg/mux
 	r := mux.NewRouter()
@@ -19,7 +19,8 @@ func CreateHandler(env string, config *cfg.Config, cdb cache.CabDBCache) http.Ha
 	// Indicate the server is healthy.
 	r.Methods("GET").Path("/health").HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte("ok"))
+			// w.Write([]byte("{ \"status\": \"ok\"} "))
+			handlers.Write(r.Context(), w, map[string]string{"version": version, "status": "ok"})
 		})
 
 	// ------------------------ API ------------------------

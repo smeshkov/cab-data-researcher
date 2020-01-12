@@ -9,12 +9,12 @@ if [ -z "$OS" ]; then
     OS="darwin"
 fi
 
-if [ ! -z "$VERSION" ]; then
-    VERSION="_$VERSION"
-fi
-
 if [ ! -d "$DIST_DIR" ]; then
   mkdir -p $DIST_DIR
 fi
 
-env GOOS=${OS} GOARCH=amd64 go build -i -v -o ${DIST_DIR}/${BINARY}_${OS}${VERSION} cmd/app/app.go
+if [ -z "$APP_ENV" ]; then
+  APP_ENV="local"
+fi
+
+env GOOS=${OS} GOARCH=amd64 go build -ldflags "-X main.env=$APP_ENV -X main.version=$VERSION" -i -v -o ${DIST_DIR}/${BINARY}_${OS} cmd/app/app.go

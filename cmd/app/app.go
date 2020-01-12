@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/smeshkov/cab-data-researcher/cache"
 	"flag"
 	"net/http"
 
-	// _ "github.com/lib/pq"
+	"github.com/smeshkov/cab-data-researcher/cache"
+
 	_ "github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
 
@@ -15,7 +15,8 @@ import (
 )
 
 var (
-	env string
+	env     string
+	version string
 )
 
 func main() {
@@ -23,7 +24,7 @@ func main() {
 	flag.Parse()
 
 	// init logger
-	err := cfg.LogSetup(env)
+	err := cfg.LogSetup(env, version)
 	if err != nil {
 		zap.L().Warn("error in setting up logger", zap.Error(err))
 	}
@@ -52,11 +53,11 @@ func main() {
 		ReadTimeout:       c.Server.ReadTimeout,
 		WriteTimeout:      c.Server.WriteTimeout,
 		Addr:              c.Server.Addr,
-		Handler:           app.CreateHandler(env, &c, cache.NewCabCache(cabDB)),
+		Handler:           app.CreateHandler(env, version, &c, cache.NewCabCache(cabDB)),
 	}
 
 	l = l.With(
-		zap.String("server_name", c.Server.Name), 
+		zap.String("server_name", c.Server.Name),
 		zap.String("server_addr", c.Server.Addr))
 
 	l.Info("starting server")

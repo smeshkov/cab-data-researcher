@@ -1,5 +1,8 @@
 .PHONY: deps fmt clean build_darwin
 
+APP_ENV?=local
+VERSION?=$(shell git rev-list HEAD --max-count=1 --abbrev-commit)
+
 deps:
 	go get -u ./...
 
@@ -10,10 +13,10 @@ clean:
 	rm -rf _dist/*
 	
 build:
-	./_bin/build.sh linux
+	APP_ENV=$(APP_ENV) ./_bin/build.sh linux $(VERSION)
 
 build_darwin:
-	./_bin/build.sh darwin
+	APP_ENV=$(APP_ENV) ./_bin/build.sh darwin $(VERSION)
 
 test:
 	./_bin/test.sh

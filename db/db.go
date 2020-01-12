@@ -15,12 +15,26 @@ import (
 
 // NewCabDB creates new instance of cabDB.
 func NewCabDB(driverName, dataSourceName string) (CabDBCloser, error) {
+	var err error
+
 	db, err := sql.Open(driverName, dataSourceName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open DB connection: %w", err)
 	}
 
-	err = db.Ping()
+	// wait for when DB is ready
+	ok := false
+	cnt := 0
+	for !ok || cnt < 3 {
+		cnt++
+		err = db.Ping()
+		if err != nil {
+			time.Sleep(time.Second)
+			continue
+		}
+		ok = true
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to ping DB: %w", err)
 	}

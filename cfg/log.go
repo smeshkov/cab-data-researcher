@@ -7,7 +7,7 @@ import (
 )
 
 // LogSetup configures logger.
-func LogSetup(env string) error {
+func LogSetup(env, version string) error {
 	l, err := newLog(env)
 	if err != nil {
 		return fmt.Errorf("failed to setup logger: %w", err)
@@ -20,6 +20,7 @@ func LogSetup(env string) error {
 	}
 	zap.ReplaceGlobals(l.With(
 		zap.String("env", env),
+		zap.String("version", version),
 	))
 	zap.L().Info("logger is ready")
 
