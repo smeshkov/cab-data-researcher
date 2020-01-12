@@ -3,7 +3,7 @@ Welcome to "Cab Data Researcher".
 
 ## Requirements
 
-* [Go 1.9+](https://golang.org/dl/);
+* [Go 1.13+](https://golang.org/dl/);
 * [Docker](https://www.docker.com/get-started).
 
 ## Startup
