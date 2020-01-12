@@ -1,29 +1,23 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"go.uber.org/zap"
 )
 
 // Write writes data to response writer.
-func Write(rw http.ResponseWriter, data interface{}) *AppError {
-	return WriteWithLog(rw, data, zap.L())
-}
-
-// WriteWithLog writes data to response writer.
-func WriteWithLog(rw http.ResponseWriter, data interface{}, l *zap.Logger) *AppError {
-	err := json.NewEncoder(rw).Encode(data)
+func Write(c context.Context, w http.ResponseWriter, data interface{}) *AppError {
+	err := json.NewEncoder(w).Encode(data)
 	if err != nil {
 		return &AppError{
 			Err:     err,
 			Message: fmt.Sprintf("error in response write: %v", err),
 			Code:    http.StatusInternalServerError,
-			Log:     l,
+			Context: c,
 		}
 	}
-	rw.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 	return nil
 }

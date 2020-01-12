@@ -1,10 +1,13 @@
 package handlers
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
 	"go.uber.org/zap"
+
+	"github.com/smeshkov/cab-data-researcher/ctx"
 )
 
 // AppHandler ...
@@ -16,7 +19,7 @@ type AppError struct {
 	Err     error
 	Message string
 	Code    int
-	Log     *zap.Logger
+	Context context.Context
 }
 
 func (e *AppError) Error() string {
@@ -26,7 +29,11 @@ func (e *AppError) Error() string {
 // ServeHTTP ...
 func (fn AppHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if e := fn(w, r); e != nil { // e is *appError, not os.Error.
-		l := e.Log
+		c := e.Context
+		if c == nil {
+			c = r.Context()
+		}
+		l := ctx.GetLog(c)
 		if l == nil {
 			l = zap.L()
 		}

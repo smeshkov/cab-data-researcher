@@ -1,6 +1,8 @@
 package cache
 
 import (
+	"context"
+	
 	"github.com/smeshkov/cab-data-researcher/db"
 )
 
@@ -10,7 +12,7 @@ type CabCache interface {
 	Delegate() db.CabDB
 
 	// Clear clears cache.
-	Clear()
+	Clear(c context.Context)
 }
 
 // CabDBCache ...

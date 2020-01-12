@@ -1,10 +1,12 @@
 package main
 
 import (
+	"github.com/smeshkov/cab-data-researcher/cache"
 	"flag"
 	"net/http"
 
-	_ "github.com/lib/pq"
+	// _ "github.com/lib/pq"
+	_ "github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
 
 	"github.com/smeshkov/cab-data-researcher/app"
@@ -43,8 +45,6 @@ func main() {
 	}
 	defer cabDB.Close()
 
-	// todo: init cache
-
 	// init server
 	srv := &http.Server{
 		ReadHeaderTimeout: c.Server.ReadTimeout,
@@ -52,7 +52,7 @@ func main() {
 		ReadTimeout:       c.Server.ReadTimeout,
 		WriteTimeout:      c.Server.WriteTimeout,
 		Addr:              c.Server.Addr,
-		Handler:           app.CreateHandler(env, &c, cabDB),
+		Handler:           app.CreateHandler(env, &c, cache.NewCabCache(cabDB)),
 	}
 
 	l = l.With(

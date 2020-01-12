@@ -1,12 +1,17 @@
-version: "3"
+version: "3.1"
 services:
+  db:
+    build: ./_resources/db/mysql
+    environment:
+      - MYSQL_DATABASE=ny_cab_data
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 3306:3306
   webapp:
     build: .
+    depends_on:
+      - db
+    links: 
+      - db:database
     ports:
       - 8080:8080
-  db:
-    image: postgres
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    ports:
-      - 5432:5432

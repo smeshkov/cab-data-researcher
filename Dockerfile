@@ -4,7 +4,7 @@ RUN apk -U add ca-certificates
 
 EXPOSE 8080
 
-ADD cab-data-researcher /bin/cab-data-researcher
-ADD _resources/config.yml /etc/cab-data-researcher/config/config.yml
+ADD ./_dist/cabresearcher_linux /bin/cabresearcher_linux
+ADD _resources/config.yml /etc/cabresearcher/config/config.yml
 
-CMD ["cab-data-researcher", "-config", "/etc/cab-data-researcher/config/config.yml"]
+CMD ["cabresearcher_linux", "-config", "/etc/cabresearcher/config/config.yml"]

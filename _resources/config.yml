@@ -6,5 +6,5 @@ server:
   addr: ":8080"
 
 db:
-  driver: postgres
-  datasource: "user=postgres dbname=ny_cab_data sslmode=verify-full"
+  driver: mysql
+  datasource: "root@tcp(database:3306)/ny_cab_data"
