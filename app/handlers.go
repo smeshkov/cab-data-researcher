@@ -14,13 +14,15 @@ import (
 	"github.com/smeshkov/cab-data-researcher/db"
 )
 
-type tripCountReq struct {
+// TripCountReq ...
+type TripCountReq struct {
 	Medallions []string `json:"medallions"`
 	PickupDate string   `json:"pickupDate"`
 	NoCache    bool     `json:"noCache,omitempty"`
 }
 
-type tripCountsResp struct {
+// TripCountsResp ...
+type TripCountsResp struct {
 	Counts []*medallionTripCount `json:"counts"`
 }
 
@@ -33,7 +35,7 @@ func getTripCount(cdb cache.CabDBCache) func(rw http.ResponseWriter, req *http.R
 	return func(w http.ResponseWriter, r *http.Request) *handlers.AppError {
 		defer cfg.LogSync()
 
-		var tripCount tripCountReq
+		var tripCount TripCountReq
 		err := json.NewDecoder(r.Body).Decode(&tripCount)
 		if err != nil {
 			return &handlers.AppError{
@@ -81,7 +83,7 @@ func getTripCount(cdb cache.CabDBCache) func(rw http.ResponseWriter, req *http.R
 			counts = append(counts, &medallionTripCount{Medallion: v.Medallion, Value: v.Count})
 		}
 
-		return handlers.Write(ctx.WithLogReq(r, l), w, &tripCountsResp{Counts: counts})
+		return handlers.Write(ctx.WithLogReq(r, l), w, &TripCountsResp{Counts: counts})
 	}
 }
 

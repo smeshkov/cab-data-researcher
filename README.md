@@ -14,6 +14,11 @@ To start an application with the DB inside Docker use `make up`.
 
 ### CLI
 
+* Get count of trips for medallion(s) on certain date:
+    * e.g. cached result: `go run cmd/cli/cli.go trips -medallions D7D598CD99978BD012A87A76A7C891B7 -pickupDate 2013-12-01`;
+    * e.g. not cached result: `go run cmd/cli/cli.go trips -medallions D7D598CD99978BD012A87A76A7C891B7 -pickupDate 2013-12-01 -noCache`;
+* To clear cache `go run cmd/cli/cli.go cache -clr`
+
 ### cURL
 
 * Healthcheck `curl http://localhost:8080/health`;
